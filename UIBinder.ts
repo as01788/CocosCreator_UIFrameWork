@@ -1,7 +1,7 @@
 //import Binder from "./Binder";
 
 import { _decorator, Component, Node, js, Label, Button, Sprite, RichText, MotionStreak, Graphics, EditBox, ScrollView, ProgressBar, Slider, PageView } from 'cc';
-import ButtonPlus from "../Common/Components/ButtonPlus";
+import ButtonPlus from './Common/Components/ButtonPlus';
 
 const {ccclass, property} = _decorator;
 @ccclass('UIBinder')

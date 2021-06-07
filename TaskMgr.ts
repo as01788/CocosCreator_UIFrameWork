@@ -1,6 +1,6 @@
 
 import { js } from "cc";
-import PriorityQueue from "../Common/Utils/PriorityQueue";
+import PriorityQueue from "./Common/Utils/PriorityQueue";
 
 /**
  * author: denglang

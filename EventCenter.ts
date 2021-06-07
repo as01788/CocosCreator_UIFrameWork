@@ -1,5 +1,5 @@
 import { js } from "cc";
-import { Pool, IPool } from "../Common/Utils/Pool";
+import { Pool } from "./Common/Utils/Pool";
 
 export class EventInfo implements IPool {
     callback: Function;
