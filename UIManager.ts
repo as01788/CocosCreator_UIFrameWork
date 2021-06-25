@@ -155,8 +155,8 @@ export default class UIManager extends Component {
                 break;
         }
         //判断是否销毁该窗体
-        if (UIBase.canDestory) {
-            this.destoryForm(UIBase, prefabPath);
+        if (UIBase.canDestroy) {
+            this.destroyForm(UIBase, prefabPath);
         }
         return true;
     }
@@ -378,8 +378,8 @@ export default class UIManager extends Component {
         baseUI.node.active = false;
     }
     /** 销毁 */
-    private destoryForm(UIBase: UIBase, prefabPath: string) {
-        ResMgr.inst.destoryForm(UIBase);
+    private destroyForm(UIBase: UIBase, prefabPath: string) {
+        ResMgr.inst.destroyForm(UIBase);
         // 从allmap中删除
         this._MapAllUIForms[prefabPath] = null;
         delete this._MapAllUIForms[prefabPath];

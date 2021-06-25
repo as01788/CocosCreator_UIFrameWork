@@ -73,7 +73,7 @@ export default class ResMgr {
         return form;
     }
     /** 销毁窗体 */
-    public destoryForm(com: UIBase) {
+    public destroyForm(com: UIBase) {
         if (!com) {
             console.log("只支持销毁继承了UIBase的窗体!");
             return;
@@ -116,7 +116,7 @@ export default class ResMgr {
         return sources;
     }
     /** 销毁动态资源  没有做引用计数的处理 */
-    public destoryDynamicRes(tag: string) {
+    public destroyDynamicRes(tag: string) {
         if (!this.dynamicDepends[tag]) {       // 销毁
             return false;
         }

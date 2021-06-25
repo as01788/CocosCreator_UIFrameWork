@@ -18,18 +18,18 @@ export default abstract class UIBase extends UIBinder {
     /** 窗体id,该窗体的唯一标示(请不要对这个值进行赋值操作, 内部已经实现了对应的赋值) */
     public uid: string;
     /** 窗体类型 */
-    public abstract formType: FormType = 0;
+    public abstract formType: FormType;
     /** 阴影类型, 只对PopUp类型窗体启用 */
     public maskType = new MaskType();
     public isAddMask:boolean=true;
     /** 关闭窗口后销毁, 会将其依赖的资源一并销毁, 采用了引用计数的管理, 不用担心会影响其他窗体 */
-    public canDestory = false;
+    public canDestroy = false;
     /** 自动绑定结点 */
     public autoBind = true;
     /** 回调 */
     protected _cb: (confirm: any) => void;
     /** 是否已经调用过preinit方法 */
-    private _inited = false;
+    private _initd = false;
 
     /** 资源路径，如果没写的话就是类名 */
     public static _prefabPath = "";
@@ -44,12 +44,12 @@ export default abstract class UIBase extends UIBinder {
     }
 
     /** 打开关闭UIBase */
-    public static async openView(...parmas: any): Promise<UIBase> {
-        return await UIManager.getInstance().openUIForm(this.prefabPath, ...parmas);
+    public static async openView(...params: any): Promise<UIBase> {
+        return await UIManager.getInstance().openUIForm(this.prefabPath, ...params);
     }
-    public static async openViewWithLoading(...parmas: any): Promise<UIBase> {
+    public static async openViewWithLoading(...params: any): Promise<UIBase> {
         await TipsManager.getInstance().showLoadingForm(this.prefabPath);
-        let uiBase = await this.openView(...parmas);
+        let uiBase = await this.openView(...params);
         await TipsManager.getInstance().hideLoadingForm();
         return uiBase;
     }
@@ -61,8 +61,8 @@ export default abstract class UIBase extends UIBinder {
 
     /** 预先初始化 */
     public async _preInit() {
-        if (this._inited) return;
-        this._inited = true;
+        if (this._initd) return;
+        this._initd = true;
         if (this.autoBind) {
             Binder.bindComponent(this);
         }
