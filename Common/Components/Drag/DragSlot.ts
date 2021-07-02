@@ -46,8 +46,23 @@ export class DragSlot extends Component {
         tooltip:"卸载时事件"
     })
     public out_event:EventHandler[]=[];
+    @property({
+        type:EventHandler,
+        tooltip:"点击事件"
+    })
+    public click_event:EventHandler[]=[];
 
     private item:DragPuls;
+
+    start(){
+        this.node.on(Node.EventType.MOUSE_UP,()=>{
+            if(this.click_event.length>0){
+                this.click_event.forEach(e=>{
+                    e.emit([this]);
+                });
+            }
+        },this);
+    }
 
     Install(item:DragPuls){
         
