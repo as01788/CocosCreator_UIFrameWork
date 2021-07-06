@@ -3,8 +3,8 @@ import { _decorator, Component, Node, EventHandler, Button, EventTouch, CCIntege
 import { DragSlot } from './DragSlot';
 const { ccclass, property } = _decorator;
 
-@ccclass('DragPuls')
-export class DragPuls extends Component {
+@ccclass('DragPlus')
+export class DragPlus extends Component {
 
     @property({
         // type:Boolean,
@@ -56,7 +56,8 @@ export class DragPuls extends Component {
         return this.slot;
     }
 
-    start() {
+
+    onLoad() {
         this.parent = this.node.parent;
         this.node.on(Node.EventType.TOUCH_START, this.touchStart, this);
         this.node.on(Node.EventType.TOUCH_MOVE, this.touchMove, this);
@@ -65,14 +66,14 @@ export class DragPuls extends Component {
         //新增一个镶嵌时调换的事件
         let handler = new EventHandler();
         handler.target = this.node;
-        handler.component = "DragPuls";
+        handler.component = "DragPlus";
         handler.handler = "install";
         handler.customEventData="slot";
         this.in_event.push(handler);
 
         let handler2 = new EventHandler();
         handler2.target = this.node;
-        handler2.component = "DragPuls";
+        handler2.component = "DragPlus";
         handler2.handler = "uninstall";
         handler2.customEventData="slot";
         this.out_event.push(handler);

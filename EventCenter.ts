@@ -119,10 +119,14 @@ export class EventCenter {
     }
 
 
-    public static async emit(eventName: string, target: unknown, ...param: any[]): Promise<any[]>;
+    public static async emit(target: unknown,eventName: string, ...param: any[]): Promise<any[]>;
     public static async emit(eventName: string, ...param: any[]): Promise<any[]>;
 
-    public static async emit(eventName: string, target?: unknown, ...param: any[]): Promise<any[]> {
+    public static async emit(target?: string|unknown, eventName?: string, ...param: any[]): Promise<any[]> {
+        if(target instanceof String){
+            eventName=target as string;
+        }
+
         let collection = this._listeners[eventName];
         if (!collection) return;
         this._dispatching++;
@@ -172,8 +176,9 @@ declare global{
     export function once(eventName: string, callback: Function, target?: any):void;
     export function off(eventName: string, callback: Function, target?: any):void;
     export function targetOff(target: any):void;
+    export function emit(target: unknown,eventName: string, ...param: any[]):Promise<any[]>;
     export function emit(eventName: string, ...param: any[]):Promise<any[]>;
-    export function emit(eventName: string, target: unknown, ...param: any[]):Promise<any[]>;
+
 }
 
 EventCenter.assign();

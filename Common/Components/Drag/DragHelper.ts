@@ -1,5 +1,5 @@
 import { UITransform } from "cc";
-import { DragPuls } from "./DragPuls";
+import { DragPlus } from "./DragPlus";
 import { DragSlot } from "./DragSlot";
 
 export class DragHelper {
@@ -29,7 +29,7 @@ export class DragHelper {
 
     // }
 
-    DragEnd(item:DragPuls):boolean{
+    DragEnd(item:DragPlus):boolean{
         let temp = false;
         if(item){
             let box = item.node.getComponent(UITransform).getBoundingBoxToWorld();
