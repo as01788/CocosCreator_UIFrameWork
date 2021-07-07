@@ -271,7 +271,8 @@ export default class UIManager extends Component {
         await UIBase._preInit();
         //加入栈中, 同时设置其zIndex 使得后进入的窗体总是显示在上面
         this._StaCurrentUIForms.push(UIBase);
-        UIBase.node.getComponent(UITransform).priority = this._StaCurrentUIForms.length;
+        // UIBase.node.getComponent(UITransform).priority = this._StaCurrentUIForms.length;
+        UIBase.node.setSiblingIndex(this._StaCurrentUIForms.length);
 
         UIBase.onShow(...params);
         await this.showForm(UIBase);
