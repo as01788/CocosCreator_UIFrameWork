@@ -1,5 +1,5 @@
 
-import { _decorator, Component, Node, EventHandler, Button, EventTouch, CCInteger, Vec2, director, Vec3 } from 'cc';
+import { _decorator, Component, Node, EventHandler, Button, EventTouch, CCInteger, Vec2, director, Vec3, find } from 'cc';
 import { DragSlot } from './DragSlot';
 const { ccclass, property } = _decorator;
 
@@ -58,10 +58,8 @@ export class DragPlus extends Component {
 
 
     onLoad() {
-        this.parent = this.node.parent;
-        this.node.on(Node.EventType.TOUCH_START, this.touchStart, this);
-        this.node.on(Node.EventType.TOUCH_MOVE, this.touchMove, this);
-        this.node.on(Node.EventType.TOUCH_END, this.touchEnd, this);
+        this.parent = find("Canvas");
+        
 
         //新增一个镶嵌时调换的事件
         let handler = new EventHandler();
@@ -77,6 +75,15 @@ export class DragPlus extends Component {
         handler2.handler = "uninstall";
         handler2.customEventData="slot";
         this.out_event.push(handler);
+    }
+
+    onEnable(){
+        this.node.on(Node.EventType.TOUCH_START, this.touchStart, this);
+        this.node.on(Node.EventType.TOUCH_MOVE, this.touchMove, this);
+        this.node.on(Node.EventType.TOUCH_END, this.touchEnd, this);
+    }
+    onDisable(){
+        this.node.targetOff(this);
     }
 
     private touchStart(event: EventTouch) {
@@ -113,12 +120,16 @@ export class DragPlus extends Component {
             // }
             // }
         } else {
-            if (this.slot) {
-                this.node.setParent(this.slot.node);
-                this.node.setPosition(this.slot.offsetPos);
-            } else {
-                this.node.setPosition(this.lastPos.x, this.lastPos.y, 0);
-            }
+            this.recoveryPos();
+        }
+    }
+
+    recoveryPos(){
+        if (this.slot) {
+            this.node.setParent(this.slot.node);
+            this.node.setPosition(this.slot.offsetPos);
+        } else {
+            this.node.setPosition(this.lastPos.x, this.lastPos.y, 0);
         }
     }
 

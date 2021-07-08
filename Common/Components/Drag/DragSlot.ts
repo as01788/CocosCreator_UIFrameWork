@@ -53,6 +53,9 @@ export class DragSlot extends Component {
     public click_event: EventHandler[] = [];
 
     private item: DragPlus;
+    public get Item(){
+        return this.item;
+    }
 
     onLoad() {
         let isClick = false;
