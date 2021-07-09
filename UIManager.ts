@@ -234,6 +234,7 @@ export default class UIManager extends Component {
         if (this._StaCurrentUIForms != null && this._StaCurrentUIForms.length >= 1) {
             let uiFrom = this._StaCurrentUIForms[this._StaCurrentUIForms.length - 1];
             if (uiFrom.maskType.clickMaskClose) {
+                // await uiFrom.hideAnimation();
                 uiFrom.closeUIForm();
             }
         }

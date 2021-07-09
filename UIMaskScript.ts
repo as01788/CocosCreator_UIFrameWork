@@ -103,7 +103,7 @@ export default class UIMaskScript extends Component {
     public async clickMaskWindow() {
         let com = UIManager.getInstance().getComponentByUid(this.uid);
         if(com && com.maskType.clickMaskClose) {
-           await UIManager.getInstance().closeUIForm(this.uid);
+            await UIManager.getInstance().closeUIForm(this.uid);
         }
     }
 }
