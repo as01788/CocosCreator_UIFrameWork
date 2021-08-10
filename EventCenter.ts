@@ -97,10 +97,14 @@ export class EventCenter {
         if (!collection) return;
         let events = collection[targetId];
         if (!events) return;
-        for (let i = events.length - 1; i >= 0; i--) {
-            if (events[i].callback === callback) {
-                events.splice(i, 1);
+        if(callback){
+            for (let i = events.length - 1; i >= 0; i--) {
+                if (events[i].callback === callback) {
+                    events.splice(i, 1);
+                }
             }
+        }else{
+            events.splice(0,events.length);
         }
         if (events.length === 0) {
             collection[targetId] = null;
