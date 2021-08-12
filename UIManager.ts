@@ -7,6 +7,7 @@ import TipsManager from "./TipsManager";
 import ResMgr from "./ResMgr";
 import UIMaskManager from "./UIMaskManager";
 import AdapterMgr from "./AdapterMgr";
+import { EventCenter } from './EventCenter';
 
 @ccclass('UIManager')
 export default class UIManager extends Component {
@@ -325,7 +326,7 @@ export default class UIManager extends Component {
         if (UIBase == null) return;
         UIBase.onHide();
         await this.hideForm(UIBase);
-
+        EventCenter.emit(this,UIEventType.close,UIBase);
         this._MapCurrentShowUIForms[prefabPath] = null;
         delete this._MapCurrentShowUIForms[prefabPath];
     }
@@ -334,6 +335,7 @@ export default class UIManager extends Component {
             let topUIForm = this._StaCurrentUIForms.pop();
             topUIForm.onHide();
             await this.hideForm(topUIForm);
+            EventCenter.emit(this,UIEventType.close,topUIForm);
         }
     }
     private async exitUIFormsAndDisplayOther(prefabPath: string) {
@@ -343,7 +345,7 @@ export default class UIManager extends Component {
         if (UIBase == null) return;
         UIBase.onHide();
         await this.hideForm(UIBase);
-
+        EventCenter.emit(this,UIEventType.close,UIBase);
         this._MapCurrentShowUIForms[prefabPath] = null;
         delete this._MapCurrentShowUIForms[prefabPath];
     }
@@ -352,7 +354,7 @@ export default class UIManager extends Component {
         if (UIBase == null) return;
         UIBase.onHide();
         await this.hideForm(UIBase);
-
+        EventCenter.emit(this,UIEventType.close,UIBase);
         this._MapIndependentForms[prefabPath] = null;
         delete this._MapIndependentForms[prefabPath];
     }
@@ -367,6 +369,7 @@ export default class UIManager extends Component {
         //await UIMaskManager.getInstance().showMask(baseUI.maskType);
 
         baseUI.node.active = true;
+        EventCenter.emit(this,UIEventType.open,baseUI);
         return new Promise(async (resolve, reject) => {
             //UIMaskManager.getInstance().addMaskWindow(baseUI.node);
             await UIMaskManager.getInstance().showMask(baseUI.maskType);
@@ -378,9 +381,11 @@ export default class UIManager extends Component {
         UIMaskManager.getInstance().removeMaskWindow(baseUI.node);
         await baseUI.hideAnimation();
         baseUI.node.active = false;
+        EventCenter.emit(this,UIEventType.close,baseUI);
     }
     /** 销毁 */
     private destroyForm(UIBase: UIBase, prefabPath: string) {
+        EventCenter.emit(this,UIEventType.destroy,UIBase);
         ResMgr.inst.destroyForm(UIBase);
         // 从allmap中删除
         this._MapAllUIForms[prefabPath] = null;
@@ -399,4 +404,14 @@ export default class UIManager extends Component {
         let UIBase = this._LoadingForm[prefabPath];
         return !!UIBase;
     }
+}
+
+
+export enum UIEventType{
+    /**打开UI */
+    open="open_uibase",
+    /**关闭UI */
+    close="close_uibase",
+    /**销毁UI */
+    destroy="destroy_uibase"
 }
