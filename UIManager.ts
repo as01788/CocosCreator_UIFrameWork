@@ -73,6 +73,7 @@ export default class UIManager extends Component {
         return this.instance;
     }
     onLoad() {
+        window.UIManager=this;
         // 初始化结点
         this._NoNormal = this.node.getChildByName(SysDefine.SYS_SCENEBASE_NODE);
         this._NoFixed = this.node.getChildByName(SysDefine.SYS_FIXEDUI_NODE);
@@ -80,8 +81,8 @@ export default class UIManager extends Component {
         this._NoTips = this.node.getChildByName(SysDefine.SYS_TOPTIPS_NODE);
 
     }
-    start() {
-    }
+    // start() {
+    // }
     /**  */
     public getComponentByUid(uid: string) {
         return this._MapAllUIForms[uid];
@@ -414,4 +415,10 @@ export enum UIEventType{
     close="close_uibase",
     /**销毁UI */
     destroy="destroy_uibase"
+}
+
+declare global{
+    interface Window{
+        UIManager:UIManager;
+    }
 }

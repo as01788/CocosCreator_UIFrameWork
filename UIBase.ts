@@ -1,6 +1,6 @@
 import UIBinder from "./UIBinder";
 import CocosHelper from "./CocosHelper";
-import UIManager from "./UIManager";
+// import UIManager from "./UIManager";
 import { FormType, SysDefine } from "./config/SysDefine";
 import { MaskType } from "./FrameType";
 import Binder from "./Binder";
@@ -13,12 +13,12 @@ import { BlockInputEvents, find, macro, Node, tween, UITransform, Vec3, _decorat
 const { ccclass, property } = _decorator;
 
 @ccclass("UIBase")
-export default abstract class UIBase extends UIBinder {
+export default class UIBase extends UIBinder {
 
     /** 窗体id,该窗体的唯一标示(请不要对这个值进行赋值操作, 内部已经实现了对应的赋值) */
     public uid: string;
     /** 窗体类型 */
-    public abstract formType: FormType;
+    public formType: FormType;
     /** 阴影类型, 只对PopUp类型窗体启用 */
     public maskType = new MaskType();
     public isAddMask:boolean=true;
@@ -45,7 +45,7 @@ export default abstract class UIBase extends UIBinder {
 
     /** 打开关闭UIBase */
     public static async openView(...params: any): Promise<UIBase> {
-        return await UIManager.getInstance().openUIForm(this.prefabPath, ...params);
+        return await window.UIManager.openUIForm(this.prefabPath, ...params);
     }
     public static async openViewWithLoading(...params: any): Promise<UIBase> {
         await TipsManager.getInstance().showLoadingForm(this.prefabPath);
@@ -54,7 +54,7 @@ export default abstract class UIBase extends UIBinder {
         return uiBase;
     }
     public static async closeView(): Promise<boolean> {
-        return await UIManager.getInstance().closeUIForm(this.prefabPath);
+        return await window.UIManager.closeUIForm(this.prefabPath);
     }
 
     
@@ -106,11 +106,11 @@ export default abstract class UIBase extends UIBinder {
      */
     public async showUIForm(uiFormName: string, ...obj: any): Promise<UIBase> {
 
-        return await UIManager.getInstance().openUIForm(uiFormName, obj);
+        return await window.UIManager.openUIForm(uiFormName, obj);
     }
     public async closeUIForm(): Promise<boolean> {
 
-        return await UIManager.getInstance().closeUIForm(this.uid);
+        return await window.UIManager.closeUIForm(this.uid);
     }
 
     /**

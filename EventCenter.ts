@@ -123,10 +123,10 @@ export class EventCenter {
     }
 
 
-    public static async emit(target: unknown,eventName: string, ...param: any[]): Promise<any[]>;
-    public static async emit(eventName: string, ...param: any[]): Promise<any[]>;
+    public static emit(target: unknown,eventName: string, ...param: any[]): any[];
+    public static emit(eventName: string, ...param: any[]): any[];
 
-    public static async emit(target?: string|unknown, eventName?: string, ...param: any[]): Promise<any[]> {
+    public static emit(target?: string|unknown, eventName?: string, ...param: any[]): any[] {
         if(target instanceof String){
             eventName=target as string;
         }
@@ -140,7 +140,7 @@ export class EventCenter {
             if(targetId && collection[targetId]){
                 for (let eventInfo of collection[targetId]) {
                     // await eventInfo.callback.call(eventInfo.target, ...param);
-                    let value = await eventInfo.callback(eventInfo.target, ...param);
+                    let value = eventInfo.callback(eventInfo.target, ...param);
                     if (eventInfo.once) {
                         let cmd = new RemoveCommand(eventName, eventInfo.callback, targetId);
                         this._removeCommands.push(cmd);
@@ -152,7 +152,7 @@ export class EventCenter {
             for (let targetId in collection) {
                 for (let eventInfo of collection[targetId]) {
                     // await eventInfo.callback.call(eventInfo.target, ...param);
-                    let value = await eventInfo.callback(eventInfo.target, ...param);
+                    let value = eventInfo.callback(eventInfo.target, ...param);
                     if (eventInfo.once) {
                         let cmd = new RemoveCommand(eventName, eventInfo.callback, targetId);
                         this._removeCommands.push(cmd);
@@ -180,8 +180,8 @@ declare global{
     export function once(eventName: string, callback: Function, target?: any):void;
     export function off(eventName: string, callback: Function, target?: any):void;
     export function targetOff(target: any):void;
-    export function emit(target: unknown,eventName: string, ...param: any[]):Promise<any[]>;
-    export function emit(eventName: string, ...param: any[]):Promise<any[]>;
+    export function emit(target: unknown,eventName: string, ...param: any[]):any[];
+    export function emit(eventName: string, ...param: any[]):any[];
 
 }
 
