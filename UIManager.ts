@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, js, find, UITransform, instantiate, UIOpacity } from 'cc';
+import { _decorator, Component, Node, js, find, UITransform, instantiate, UIOpacity, director, game } from 'cc';
 const { ccclass, property } = _decorator;
 
 import UIBase from "./UIBase";
@@ -67,7 +67,7 @@ export default class UIManager extends Component {
 
                 this.instance = newNode.addComponent<UIManager>(this);
 
-                
+                game.addPersistRootNode(sceneBase);
             }
         }
         return this.instance;
