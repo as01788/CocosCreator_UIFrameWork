@@ -144,7 +144,7 @@ export default class UIBase extends UIBinder {
     }
 
     /** 设置是否挡住触摸事件 */
-    private _blocker: BlockInputEvents = null;
+    protected _blocker: BlockInputEvents = null;
     public setBlockInput(block: boolean, clickCallback?: Function) {
         if (block && !this._blocker) {
             let node = find('block_input_events', this.node.parent);
