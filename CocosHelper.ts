@@ -155,7 +155,7 @@ export default class CocosHelper {
         return name.split(SysDefine.SYS_STANDARD_Separator);
     }
     /** 获得Component的类名 */
-    public static getComponentName(com: Function) {
+    public static getComponentName(com: Function|any) {
         // console.log('开始反射类名',JSON.stringify(com));
         // console.log(com.name);
         let arr = com.name.match(/<.*>$/);
