@@ -46,8 +46,9 @@ export default class UIBase extends UIBinder {
 
     /** 打开关闭UIBase */
     public static async openView(...params: any): Promise<UIBase> {
-        EventCenter.emit(undefined,CocosHelper.getComponentName(this)+"_open");
-        return await window.UIManager.openUIForm(this.prefabPath, ...params);
+        let temp = await window.UIManager.openUIForm(this.prefabPath, ...params);
+        EventCenter.emit(undefined,CocosHelper.getComponentName(this)+"_open",this);
+        return temp;
     }
     public static async openViewWithLoading(...params: any): Promise<UIBase> {
         await TipsManager.getInstance().showLoadingForm(this.prefabPath);
@@ -56,8 +57,9 @@ export default class UIBase extends UIBinder {
         return uiBase;
     }
     public static async closeView(): Promise<boolean> {
-        EventCenter.emit(undefined,CocosHelper.getComponentName(this)+"_close");
-        return await window.UIManager.closeUIForm(this.prefabPath);
+        let temp = await window.UIManager.closeUIForm(this.prefabPath);
+        EventCenter.emit(undefined,CocosHelper.getComponentName(this)+"_close",this);
+        return temp;
     }
 
     
@@ -108,12 +110,14 @@ export default class UIBase extends UIBinder {
      * @param obj 参数
      */
     public async showUIForm(uiFormName: string, ...obj: any): Promise<UIBase> {
-        EventCenter.emit(undefined,CocosHelper.getComponentName(this)+"_open");
-        return await window.UIManager.openUIForm(uiFormName, obj);
+        let temp = await window.UIManager.openUIForm(uiFormName, obj);
+        EventCenter.emit(undefined,CocosHelper.getComponentName(this)+"_open",this);
+        return temp;
     }
     public async closeUIForm(): Promise<boolean> {
-        EventCenter.emit(undefined,CocosHelper.getComponentName(this)+"_close");
-        return await window.UIManager.closeUIForm(this.uid);
+        let temp = await window.UIManager.closeUIForm(this.uid);
+        EventCenter.emit(undefined,CocosHelper.getComponentName(this)+"_close",this);
+        return temp;
     }
 
     /**
