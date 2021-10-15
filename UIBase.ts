@@ -6,7 +6,7 @@ import { MaskType } from "./FrameType";
 import Binder from "./Binder";
 import AdapterMgr from "./AdapterMgr";
 import TipsManager from "./TipsManager";
-import { BlockInputEvents, find, macro, Node, tween, UITransform, Vec3, _decorator } from "cc";
+import { BlockInputEvents, find, js, macro, Node, tween, UITransform, Vec3, _decorator } from "cc";
 import { EventCenter } from "./EventCenter";
 // import { autorun, IReactionPublic, observable } from "./lib/aa-mobx";
 // import UIMaskManager from "./UIMaskManager";
@@ -39,15 +39,18 @@ export default class UIBase extends UIBinder {
     }
     public static get prefabPath() {
         if (!this._prefabPath || this._prefabPath.length <= 0) {
-            this._prefabPath = SysDefine.UI_PATH_ROOT + CocosHelper.getComponentName(this);
+            // this._prefabPath = SysDefine.UI_PATH_ROOT + CocosHelper.getComponentName(this);
+            this._prefabPath = SysDefine.UI_PATH_ROOT + js.getClassName(this);
         }
         return this._prefabPath;
     }
 
+
+
     /** 打开关闭UIBase */
     public static async openView(...params: any): Promise<UIBase> {
         let temp = await window.UIManager.openUIForm(this.prefabPath, ...params);
-        EventCenter.emit(undefined,CocosHelper.getComponentName(this)+"_open",this);
+        EventCenter.emit(undefined,js.getClassName(this)+"_open",this);
         return temp;
     }
     public static async openViewWithLoading(...params: any): Promise<UIBase> {
@@ -58,7 +61,7 @@ export default class UIBase extends UIBinder {
     }
     public static async closeView(): Promise<boolean> {
         let temp = await window.UIManager.closeUIForm(this.prefabPath);
-        EventCenter.emit(undefined,CocosHelper.getComponentName(this)+"_close",this);
+        EventCenter.emit(undefined,js.getClassName(this)+"_close",this);
         return temp;
     }
 
@@ -111,12 +114,12 @@ export default class UIBase extends UIBinder {
      */
     public async showUIForm(uiFormName: string, ...obj: any): Promise<UIBase> {
         let temp = await window.UIManager.openUIForm(uiFormName, obj);
-        EventCenter.emit(undefined,CocosHelper.getComponentName(this)+"_open",this);
+        EventCenter.emit(undefined,js.getClassName(this)+"_open",this);
         return temp;
     }
     public async closeUIForm(): Promise<boolean> {
         let temp = await window.UIManager.closeUIForm(this.uid);
-        EventCenter.emit(undefined,CocosHelper.getComponentName(this)+"_close",this);
+        EventCenter.emit(undefined,js.getClassName(this)+"_close",this);
         return temp;
     }
 
