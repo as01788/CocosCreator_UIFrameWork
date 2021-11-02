@@ -3,35 +3,35 @@ import { EventTouch, Label, loader, Node, rect, Sprite, SpriteFrame, UITransform
 import CocosHelper from "../../CocosHelper";
 
 export interface TypeConstructor<T> {
-    new():T;
+    new(): T;
 }
 
 export interface IRandomGenerator {
-    nextInt(start:number, endAndNotIncluded:number) : number;
-    next01():number;
+    nextInt(start: number, endAndNotIncluded: number): number;
+    next01(): number;
 }
 
 let kDefaultRandomGenerator = {
-    nextInt(start:number, endAndNotIncluded:number) : number {
+    nextInt(start: number, endAndNotIncluded: number): number {
         return Math.floor(Math.random() * (endAndNotIncluded - start)) + start;
     },
-    next01() : number {
+    next01(): number {
         return Math.random();
     }
 };
 
 export class CommonUtils {
-    public static isArray(target:any) : boolean {
+    public static isArray(target: any): boolean {
         if (typeof Array.isArray === "function") {
             return Array.isArray(target);
-        }else{
+        } else {
             return Object.prototype.toString.call(target) === "[object Array]";
         }
     }
 
 
-    public static foramtDate(dateObj:Date, format:string) {
-        var date : any = {
+    public static foramtDate(dateObj: Date, format: string) {
+        var date: any = {
             "M+": dateObj.getMonth() + 1,
             "d+": dateObj.getDate(),
             "h+": dateObj.getHours(),
@@ -45,83 +45,83 @@ export class CommonUtils {
         }
         for (var k in date) {
             if (new RegExp("(" + k + ")").test(format)) {
-                    format = format.replace(RegExp.$1, ("00" + date[k]).substr(("" + date[k]).length));
+                format = format.replace(RegExp.$1, ("00" + date[k]).substr(("" + date[k]).length));
             }
         }
         return format;
     }
 
-    public static getElemClamped<T>(arr:T[], index:number) : T {
+    public static getElemClamped<T>(arr: T[], index: number): T {
         return arr[Math.max(0, Math.min(arr.length - 1, index))];
     }
 
-    public static randomIntClosedRange(min:number, max:number) : number {            //random integer in [min,max]
+    public static randomIntClosedRange(min: number, max: number): number {            //random integer in [min,max]
         return Math.floor(Math.random() * (max - min + 0.9999) + min);
     }
 
-    public static indexOf<T>(val:T, arr:T[]) : number {
-        for(let i = 0; i < arr.length; i++) {
-            if(arr[i] == val) {
+    public static indexOf<T>(val: T, arr: T[]): number {
+        for (let i = 0; i < arr.length; i++) {
+            if (arr[i] == val) {
                 return i;
             }
         }
         return -1;
     }
 
-    public static indexOfArr<T>(arr:T[], ...values:T[]) : number {
+    public static indexOfArr<T>(arr: T[], ...values: T[]): number {
         let paramCount = values.length;
         let found = false;
-        for(let i = 0; i <= arr.length - paramCount; i+=paramCount) {
+        for (let i = 0; i <= arr.length - paramCount; i += paramCount) {
             found = true;
-            for(let j = 0; j < paramCount; j++) {
-                if(arr[i + j] !== values[j]) {
+            for (let j = 0; j < paramCount; j++) {
+                if (arr[i + j] !== values[j]) {
                     found = false;
                     break;
                 }
             }
-            if(found) {
+            if (found) {
                 return i;
             }
         }
         return -1;
     }
 
-    public static floatEqual(left:number, right:number, epsilon:number = 0.000001) : boolean {
+    public static floatEqual(left: number, right: number, epsilon: number = 0.000001): boolean {
         return Math.abs(left - right) < epsilon;
     }
 
-    public static formatTimeInterval(seconds:number, alwaysShowMinutes:boolean = false, alwaysShowHours:boolean = false) {
+    public static formatTimeInterval(seconds: number, alwaysShowMinutes: boolean = false, alwaysShowHours: boolean = false) {
         alwaysShowMinutes = alwaysShowHours || alwaysShowMinutes;
         let ret = "";
         let hour = Math.floor(seconds / 3600);
         seconds = seconds % 3600;
         let minute = Math.floor(seconds / 60);
         seconds = Math.floor(seconds % 60);
-        if(alwaysShowHours || hour > 0) {
-            if(hour < 10) {
+        if (alwaysShowHours || hour > 0) {
+            if (hour < 10) {
                 ret += "0";
             }
             ret += hour + ":";
         }
-        if(alwaysShowMinutes || minute > 0 || hour > 0) {
-            if(minute < 10) {
+        if (alwaysShowMinutes || minute > 0 || hour > 0) {
+            if (minute < 10) {
                 ret += "0";
             }
             ret += minute + ":";
         }
-        if(seconds < 10) {
+        if (seconds < 10) {
             ret += "0";
         }
         ret += seconds;
         return ret;
     }
 
-    public static alignNumber(input:number, divider:number) : number {
+    public static alignNumber(input: number, divider: number): number {
         input = input - Math.floor(input / divider) * divider;
         return input;
     }
 
-    public static formatNumber(num:number) {
+    public static formatNumber(num: number) {
         var str = "" + Math.floor(num);
         var newStr = "";
         var count = 0;
@@ -153,20 +153,20 @@ export class CommonUtils {
         }
     }
 
-    public static updateLabelSize(label:Label) {
+    public static updateLabelSize(label: Label) {
         label["_updateRenderData"](true);
     }
 
-    public static lerp(begin:number, end:number, factor:number) {
+    public static lerp(begin: number, end: number, factor: number) {
         return begin + (end - begin) * factor;
     }
 
-    public static shuffle(container:any[], randGenerator:IRandomGenerator = kDefaultRandomGenerator, start:number = 0, count:number = -1):void {
+    public static shuffle(container: any[], randGenerator: IRandomGenerator = kDefaultRandomGenerator, start: number = 0, count: number = -1): void {
         randGenerator = randGenerator || kDefaultRandomGenerator;
-        if(count < 0) {
+        if (count < 0) {
             count = container.length - start;
         }
-        for(let i = 0; i < count; i++) {
+        for (let i = 0; i < count; i++) {
             let idx = randGenerator.nextInt(start, start + count - i);
             let temp = container[idx];
             container[idx] = container[count - i - 1 + start];
@@ -174,46 +174,46 @@ export class CommonUtils {
         }
     }
 
-    public static setItemSpriteFrame(sprite:Sprite, name:string, successCB:(sprite:Sprite)=>void = null) {
+    public static setItemSpriteFrame(sprite: Sprite, name: string, successCB: (sprite: Sprite) => void = null) {
         sprite["spriteFrameName"] = name;
-        CocosHelper.loadRes('name', SpriteFrame).then((spriteFrame:SpriteFrame)=>{
-            if(sprite.isValid && sprite["spriteFrameName"] == name) {
+        CocosHelper.loadRes('name', SpriteFrame).then((spriteFrame: SpriteFrame) => {
+            if (sprite.isValid && sprite["spriteFrameName"] == name) {
                 sprite.spriteFrame = spriteFrame;
-                if(successCB) {
+                if (successCB) {
                     successCB(sprite);
                 }
             }
         });
     }
 
-    public static addSimpleClick(target:Node, cb:()=>void) {
+    public static addSimpleClick(target: Node, cb: () => void) {
         let targetNode = target;
-        let lastTouchPos : Vec2 = null;
-        targetNode.on(Node.EventType.TOUCH_START, (e:EventTouch)=>{
+        let lastTouchPos: Vec2 = null;
+        targetNode.on(Node.EventType.TOUCH_START, (e: EventTouch) => {
             lastTouchPos = e.getLocation();
         }, this);
-        targetNode.on(Node.EventType.TOUCH_END, (e:EventTouch)=>{
-            if(lastTouchPos) {
+        targetNode.on(Node.EventType.TOUCH_END, (e: EventTouch) => {
+            if (lastTouchPos) {
                 let delta = lastTouchPos.subtract(e.getLocation()).length();
-                if(delta < 3) {
+                if (delta < 3) {
                     cb();
                 }
             }
         }, this);
     }
 
-    public static isGoodNumber(num:any) {
+    public static isGoodNumber(num: any) {
         return (typeof num) === "number" && !Number.isNaN(num);
     }
 
     public static getVisibleRect() {
         let visibleRect = view.getViewportRect();
-        visibleRect = rect(visibleRect.origin.x / -view.getScaleX(), visibleRect.origin.y / -view.getScaleY(), 
-        (visibleRect.size.width + visibleRect.origin.x * 2) / view.getScaleX(), (visibleRect.size.height + visibleRect.origin.y * 2) / view.getScaleY());
+        visibleRect = rect(visibleRect.origin.x / -view.getScaleX(), visibleRect.origin.y / -view.getScaleY(),
+            (visibleRect.size.width + visibleRect.origin.x * 2) / view.getScaleX(), (visibleRect.size.height + visibleRect.origin.y * 2) / view.getScaleY());
         return visibleRect;
     }
 
-    public static async httpGet(url:string, cb) {
+    public static async httpGet(url: string, cb) {
         let xhr = loader.getXMLHttpRequest();
         xhr.onreadystatechange = function () {
             // log("Get: readyState:" + xhr.readyState + " status:" + xhr.status);
@@ -222,7 +222,7 @@ export class CommonUtils {
                 let rsp = JSON.parse(respone);
                 cb(rsp);
             } else if (xhr.readyState === 4 && xhr.status == 401) {
-                cb({"ret":1});
+                cb({ "ret": 1 });
             } else {
                 //callback(-1);
             }
@@ -250,7 +250,7 @@ export class CommonUtils {
      * Box-Muller algorithm
      * @param avg 
      */
-    public static randomGaussian(avg:number, variant:number, randGenerator:IRandomGenerator = kDefaultRandomGenerator) : number {
+    public static randomGaussian(avg: number, variant: number, randGenerator: IRandomGenerator = kDefaultRandomGenerator): number {
         randGenerator = randGenerator || kDefaultRandomGenerator;
         let x1 = randGenerator.next01();
         let x2 = randGenerator.next01();
@@ -258,17 +258,17 @@ export class CommonUtils {
         return standard * variant + avg;
     }
 
-    public static deepCopy(dst:Object, src:Object) {
-        for(let field in src) {
+    public static deepCopy(dst: Object, src: Object) {
+        for (let field in src) {
             this._deepCopyFields(dst, src, field);
         }
     }
 
     public static constructObjectMap(obj: any): Map<string, any> {
         let map = new Map();
-        for(let key in obj) {
+        for (let key in obj) {
             let val = obj[key]
-            if(typeof val === "object") {
+            if (typeof val === "object") {
                 map.set(key, this.constructObjectMap(val));
             } else {
                 map.set(key, val);
@@ -277,20 +277,20 @@ export class CommonUtils {
         return map
     }
 
-    private static _deepCopyFields(dst:Object, src:Object, field:any) {
+    private static _deepCopyFields(dst: Object, src: Object, field: any) {
         let value = src[field];
-        if(typeof value == "number" || typeof value == "string") {
+        if (typeof value == "number" || typeof value == "string") {
             dst[field] = value;
-        } else if(this.isArray[value]) {
+        } else if (this.isArray[value]) {
             let dstArr = dst[field] = [];
-            for(let i = 0; i < value.length; i++) {
+            for (let i = 0; i < value.length; i++) {
                 this._deepCopyFields(dstArr, value, i);
             }
-        } else if(value == null) {
+        } else if (value == null) {
             dst[field] = null;
-        } else if(typeof value == "object") {
+        } else if (typeof value == "object") {
             let dstObj = new value.constructor();
-            for(let field in src) {
+            for (let field in src) {
                 this._deepCopyFields(dstObj, value, field);
             }
         }
@@ -382,12 +382,12 @@ export class CommonUtils {
         return (suffix == c.substring(c.length - suffix.length));
     }
 
-    static makeMaxWidthLabel(label: Label,width:number) : Label {
+    static makeMaxWidthLabel(label: Label, width: number): Label {
         let obj = {};
         obj["__proto__"] = label;
         Object.defineProperty(obj, "string", {
-            configurable:true,
-            enumerable:true,
+            configurable: true,
+            enumerable: true,
             get() {
                 return label.string;
             },
@@ -395,7 +395,7 @@ export class CommonUtils {
                 label.overflow = Label.Overflow.NONE;
                 label.string = str;
                 label["_updateRenderData"](true);
-                if(label.node.getComponent(UITransform).width > width) {
+                if (label.node.getComponent(UITransform).width > width) {
                     label.overflow = Label.Overflow.RESIZE_HEIGHT;
                     label.node.getComponent(UITransform).setContentSize(width, 1);
                     label.string = str;
@@ -419,14 +419,37 @@ export class CommonUtils {
     private static strlen(str) {
         let len = 0;
         for (let i = 0; i < str.length; i++) {
-          let c = str.charCodeAt(i);
-          //单字节加1 
-          if ((c >= 0x0001 && c <= 0x007e) || (0xff60 <= c && c <= 0xff9f)) {
-            len++;
-          } else {
-            len += 2;
-          }
+            let c = str.charCodeAt(i);
+            //单字节加1 
+            if ((c >= 0x0001 && c <= 0x007e) || (0xff60 <= c && c <= 0xff9f)) {
+                len++;
+            } else {
+                len += 2;
+            }
         }
         return len;
     }
 }
+
+
+declare global {
+    interface Number {
+        /**
+        * 转化成带有小数点的K,M,B
+        * @param decimals 
+        */
+        formatEngNumber: (decimals?: number) => string;
+        /**
+        * 转化成K,M,B
+        * @param decimals 
+        */
+        formatNumberToEng:()=>string;
+        /**
+         * 转成时间格式
+         */
+        formatTimeInterval:(alwaysShowMinutes?:boolean , alwaysShowHours?:boolean)=>string;
+    }
+}
+Number.prototype.formatEngNumber = function(decimals){return CommonUtils.formatEngNumber(this,decimals);}
+Number.prototype.formatNumberToEng = function(){return CommonUtils.formatNumberToEng(this);}
+Number.prototype.formatTimeInterval = function(alwaysShowMinutes,alwaysShowHours){return CommonUtils.formatTimeInterval(this,alwaysShowMinutes,alwaysShowHours);}
