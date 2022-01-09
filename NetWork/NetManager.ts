@@ -2,6 +2,7 @@
 import { ISocket, IMsg } from "./NetInterface";
 import CWebSocket from "./CWebSocket";
 import { EventCenter } from "../EventCenter";
+import { js } from "cc";
 
 enum SocketState {
     Closed,             // 已关闭
@@ -34,7 +35,7 @@ export default class NetManager {
     private connectOption : connectOption;                   // 连接参数
     private reconnectTimes: number = 0;                      // 重连次数 -1表示一直重连， 0表示不重连， 其他为重连次数
     /**  */
-    private eventHandlers : {[key: number]: Array<EventHandler>} = cc.js.createMap();
+    private eventHandlers : {[key: number]: Array<EventHandler>} = js.createMap();
     
 
     /** 连接网络 */

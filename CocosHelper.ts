@@ -1,4 +1,4 @@
-import { Animation, AnimationClip, Asset, Node, resources, Tween, tween } from "cc";
+import { Animation, AnimationClip, Asset, AssetManager, assetManager, Node, resources, Tween, tween } from "cc";
 import { SysDefine } from "./config/SysDefine";
 export class LoadProgress {
     public url: string;
@@ -104,6 +104,60 @@ export default class CocosHelper {
                 CocosHelper.loadProgress.item = null;
                 CocosHelper.loadProgress.cb = null;
             });
+        });
+    }
+    public static loadResFromBundle<T extends Asset>(bundleName:string,url: string, type: typeof Asset, progressCallback?: (completedCount: number, totalCount: number, item: any) => void): Promise<T>{
+        if (!bundleName || !url || !type) {
+            console.log("参数错误", bundleName,url, type);
+            return;
+        }
+        CocosHelper.loadProgress.url = url;
+        if(progressCallback) {
+            this.loadProgress.cb = progressCallback;
+        }
+        return new Promise((resolve, reject) => {
+            let bundle = assetManager.getBundle(bundleName);
+            if(!bundle){
+                assetManager.loadBundle(bundleName,(err,asset:AssetManager.Bundle)=>{
+                    if(err){
+                        console.error(err);
+                        resolve(null);
+                    }
+                    if(asset){
+                        asset.load(url,type,this._progressCallback,(err,asset:T)=>{
+                            if (err) {
+                                console.log(`${url} [资源加载] 错误 ${err}`);
+                                resolve(null);
+                            }else {
+                                resolve(asset);
+                            }
+                            // 加载完毕了，清理进度数据
+                            CocosHelper.loadProgress.url = '';
+                            CocosHelper.loadProgress.completedCount = 0;
+                            CocosHelper.loadProgress.totalCount = 0;
+                            CocosHelper.loadProgress.item = null;
+                            CocosHelper.loadProgress.cb = null;
+                        });
+                    }else{
+                        console.error("加载bundle失败");
+                    }
+                });
+            }else{
+                bundle.load(url,type,this._progressCallback,(err,asset:T)=>{
+                    if (err) {
+                        console.log(`${url} [资源加载] 错误 ${err}`);
+                        resolve(null);
+                    }else {
+                        resolve(asset);
+                    }
+                    // 加载完毕了，清理进度数据
+                    CocosHelper.loadProgress.url = '';
+                    CocosHelper.loadProgress.completedCount = 0;
+                    CocosHelper.loadProgress.totalCount = 0;
+                    CocosHelper.loadProgress.item = null;
+                    CocosHelper.loadProgress.cb = null;
+                });
+            }
         });
     }
     /** 
