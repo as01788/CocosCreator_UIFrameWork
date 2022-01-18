@@ -103,7 +103,7 @@ export default class NetManager {
         }
         /** 网络错误 */
         this.socket.onError = function(e) {
-            console.log(`网络错误！`);
+            console.log(`网络错误！`,e);
         }
     }
 
