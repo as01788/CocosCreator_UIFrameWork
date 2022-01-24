@@ -67,7 +67,8 @@ export default class UIManager extends Component {
 
                 this.instance = newNode.addComponent<UIManager>(this);
 
-                game.addPersistRootNode(sceneBase);
+                
+                //game.addPersistRootNode(newNode);
             }
         }
         return this.instance;
