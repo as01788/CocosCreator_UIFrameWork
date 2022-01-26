@@ -123,7 +123,7 @@ export default class NetManager {
     public offEventHandler(cmd: number, callback: Function, target?: Object) {
         let arr = this.eventHandlers[cmd];
         if(!arr) {
-            console.log(`没有这个命令${cmd}，请注意`);
+            console.log(`没有这个命令${cmd}，请注意。`);
             return ;
         }
         for(let i=arr.length-1; i>=0; i--) {

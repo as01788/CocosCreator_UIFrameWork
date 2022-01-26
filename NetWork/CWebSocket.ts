@@ -42,7 +42,7 @@ export default class CWebSocket implements ISocket {
             console.log('网络连接已关闭, 无法发送消息');
             return false;
         }
-        this.ws.send(JSON.stringify(data));
+        this.ws.send(JSON.stringify(data.data));
         return true;
     }
 
