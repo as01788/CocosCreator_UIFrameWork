@@ -30,8 +30,7 @@ export class DragSlot extends Component {
     })
     public isExchange: boolean = true;
 
-    @property({
-        type: Vec3,
+    @property({ 
         tooltip: "嵌套时的物品位置偏移"
     })
     public offsetPos: Vec3 = new Vec3(0, 0, 0);
