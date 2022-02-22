@@ -50,7 +50,7 @@ export default class UIBase extends UIBinder {
     /** 打开关闭UIBase */
     public static async openView(...params: any): Promise<UIBase> {
         let temp = await window.UIManager.openUIForm(this.prefabPath, ...params);
-        EventCenter.emit(undefined,js.getClassName(this)+"_open",this);
+        EventCenter.emit(undefined,"open",this);
         return temp;
     }
     public static async openViewWithLoading(...params: any): Promise<UIBase> {
@@ -61,7 +61,7 @@ export default class UIBase extends UIBinder {
     }
     public static async closeView(): Promise<boolean> {
         let temp = await window.UIManager.closeUIForm(this.prefabPath);
-        EventCenter.emit(undefined,js.getClassName(this)+"_close",this);
+        EventCenter.emit(undefined,"close",this);
         return temp;
     }
 
@@ -114,12 +114,12 @@ export default class UIBase extends UIBinder {
      */
     public async showUIForm(uiFormName: string, ...obj: any): Promise<UIBase> {
         let temp = await window.UIManager.openUIForm(uiFormName, obj);
-        EventCenter.emit(undefined,js.getClassName(this)+"_open",this);
+        EventCenter.emit(undefined,"open",this);
         return temp;
     }
     public async closeUIForm(): Promise<boolean> {
         let temp = await window.UIManager.closeUIForm(this.uid);
-        EventCenter.emit(undefined,js.getClassName(this)+"_close",this);
+        EventCenter.emit(undefined,"close",this);
         return temp;
     }
 

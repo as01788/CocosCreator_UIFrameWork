@@ -18,6 +18,7 @@ export default class UIManager extends Component {
     private _StaCurrentUIForms: Array<UIBase> = [];                                      // 存储弹出的窗体
     private _MapAllUIForms: { [key: string]: UIBase } = js.createMap();                // 所有的窗体
     private _MapCurrentShowUIForms: { [key: string]: UIBase } = js.createMap();        // 正在显示的窗体(不包括弹窗)
+    private _MapCurrentShowUIFormPrefabPath:string;
     private _MapIndependentForms: { [key: string]: UIBase } = js.createMap();          // 独立窗体 独立于其他窗体, 不受其他窗体的影响
     private _LoadingForm: { [key: string]: boolean } = js.createMap();                 // 正在加载的form 
     private static instance: UIManager = null;                     // 单例
@@ -257,6 +258,7 @@ export default class UIManager extends Component {
         if (UIBaseFromAllCache != null) {
             await UIBaseFromAllCache._preInit();
             this._MapCurrentShowUIForms[prefabPath] = UIBaseFromAllCache;
+            this._MapCurrentShowUIFormPrefabPath = prefabPath;
 
             UIBaseFromAllCache.onShow(...params);
             await this.showForm(UIBaseFromAllCache);
@@ -302,6 +304,7 @@ export default class UIManager extends Component {
         await UIBaseFromAll._preInit();
 
         this._MapCurrentShowUIForms[prefabPath] = UIBaseFromAll;
+        this._MapCurrentShowUIFormPrefabPath = prefabPath;
 
         UIBaseFromAll.onShow(...params);
         await this.showForm(UIBaseFromAll);
@@ -330,6 +333,7 @@ export default class UIManager extends Component {
         await this.hideForm(UIBase);
         EventCenter.emit(this,UIEventType.close,UIBase);
         this._MapCurrentShowUIForms[prefabPath] = null;
+        this._MapCurrentShowUIFormPrefabPath = null;
         delete this._MapCurrentShowUIForms[prefabPath];
     }
     private async popUIForm() {
@@ -349,6 +353,7 @@ export default class UIManager extends Component {
         await this.hideForm(UIBase);
         EventCenter.emit(this,UIEventType.close,UIBase);
         this._MapCurrentShowUIForms[prefabPath] = null;
+        this._MapCurrentShowUIFormPrefabPath = null;
         delete this._MapCurrentShowUIForms[prefabPath];
     }
     private async exitIndependentForms(prefabPath: string) {
@@ -405,6 +410,10 @@ export default class UIManager extends Component {
     public checkUIFormIsLoading(prefabPath: string) {
         let UIBase = this._LoadingForm[prefabPath];
         return !!UIBase;
+    }
+    /** 返回当前展示的窗体 */
+    public getCurrentUIFrom<T extends UIBase>():T{
+        return this._MapCurrentShowUIForms[this._MapCurrentShowUIFormPrefabPath] as T;
     }
 }
 
