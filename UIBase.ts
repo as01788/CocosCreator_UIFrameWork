@@ -122,6 +122,10 @@ export default class UIBase extends UIBinder {
         EventCenter.emit(undefined,"close",this);
         return temp;
     }
+    public async showCustomUIFrom(event,uiFormName:string){
+        await window.UIManager.openUIForm(uiFormName);
+        EventCenter.emit(undefined,"open",this);
+    }
 
     /**
      * 弹窗动画
@@ -175,5 +179,8 @@ export default class UIBase extends UIBinder {
             this._blocker = null;
         }
     }
+
+
+
 
 }
