@@ -106,11 +106,12 @@ export default class CocosHelper {
             });
         });
     }
-    public static loadResFromBundle<T extends Asset>(bundleName: string, url: string, type: typeof Asset, progressCallback?: (completedCount: number, totalCount: number, item: any) => void,isArray:boolean=false): Promise<T> {
+    public static loadResFromBundle<T extends Asset>(bundleName: string, url: string, type: typeof Asset, progressCallback?: (completedCount: number, totalCount: number, item: any) => void,isArray:boolean=false,isLog:boolean=true): Promise<T> {
         if (!bundleName || !url || !type) {
-            console.log("参数错误", bundleName, url, type);
+            isLog && console.log("参数错误", bundleName, url, type);
             return;
         }
+
         CocosHelper.loadProgress.url = url;
         if (progressCallback) {
             this.loadProgress.cb = progressCallback;
@@ -120,14 +121,14 @@ export default class CocosHelper {
             if (!bundle) {
                 assetManager.loadBundle(bundleName, (err, asset: AssetManager.Bundle) => {
                     if (err) {
-                        console.error(err);
+                        isLog && console.error(err);
                         resolve(null);
                     }
                     if (asset) {
                         if (isArray) {
                             asset.loadDir(url, type, this._progressCallback, (err, assets:any) => {
                                 if (err) {
-                                    console.log(`${url} [资源加载] 错误 ${err}`);
+                                    isLog && console.log(`${url} [资源加载] 错误 ${err}`);
                                     resolve(null);
                                 } else {
                                     resolve(assets);
@@ -142,7 +143,7 @@ export default class CocosHelper {
                         } else {
                             asset.load(url, type, this._progressCallback, (err, asset: T) => {
                                 if (err) {
-                                    console.log(`${url} [资源加载] 错误 ${err}`);
+                                    isLog && console.log(`${url} [资源加载] 错误 ${err}`);
                                     resolve(null);
                                 } else {
                                     resolve(asset);
@@ -156,14 +157,14 @@ export default class CocosHelper {
                             });
                         }
                     } else {
-                        console.error("加载bundle失败");
+                        isLog && console.error("加载bundle失败");
                     }
                 });
             } else {
                 if (isArray) {
                     bundle.loadDir(url, type, this._progressCallback, (err, assets:any) => {
                         if (err) {
-                            console.log(`${url} [资源加载] 错误 ${err}`);
+                            isLog && console.log(`${url} [资源加载] 错误 ${err}`);
                             resolve(null);
                         } else {
                             resolve(assets);
@@ -178,10 +179,10 @@ export default class CocosHelper {
                 } else {
                     bundle.load(url, type, this._progressCallback, (err, asset: T) => {
                         if (err) {
-                            console.log(`${url} [资源加载] 错误 ${err}`);
+                            isLog &&  console.log(`${url} [资源加载] 错误 ${err}`);
                             resolve(null);
                         } else {
-                            resolve(asset);
+                            resolve(asset as T);
                         }
                         // 加载完毕了，清理进度数据
                         CocosHelper.loadProgress.url = '';

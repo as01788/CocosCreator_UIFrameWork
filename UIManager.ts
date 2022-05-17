@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, js, find, UITransform, instantiate, UIOpacity, director, game } from 'cc';
+import { _decorator, Component, Node, js, find, UITransform, instantiate, UIOpacity, director, game, Widget } from 'cc';
 const { ccclass, property } = _decorator;
 
 import UIBase from "./UIBase";
@@ -62,9 +62,32 @@ export default class UIManager extends Component {
 
                 
                 
-                newNode.getComponent(UITransform).setContentSize(AdapterMgr.inst.visibleSize);
-                mask.getComponent(UITransform).setContentSize(AdapterMgr.inst.visibleSize);
-                pop.getComponent(UITransform).setContentSize(AdapterMgr.inst.visibleSize);
+                // newNode.getComponent(UITransform).setContentSize(AdapterMgr.inst.visibleSize);
+                // mask.getComponent(UITransform).setContentSize(AdapterMgr.inst.visibleSize);
+                // pop.getComponent(UITransform).setContentSize(AdapterMgr.inst.visibleSize);
+                let newNodeWidget = newNode.addComponent(Widget);
+                newNodeWidget.bottom = newNodeWidget.top = newNodeWidget.left = newNodeWidget.right = 0;
+                newNodeWidget.isAlignBottom = newNodeWidget.isAlignTop = newNodeWidget.isAlignLeft = newNodeWidget.isAlignRight = true;
+
+                let maskWidget = mask.addComponent(Widget);
+                maskWidget.bottom = maskWidget.top = maskWidget.left = maskWidget.right = 0;
+                maskWidget.isAlignBottom = maskWidget.isAlignTop = maskWidget.isAlignLeft = maskWidget.isAlignRight = true;
+
+                let sceneWidget = sceneBase.addComponent(Widget);
+                sceneWidget.bottom = sceneWidget.top = sceneWidget.left = sceneWidget.right = 0;
+                sceneWidget.isAlignBottom = sceneWidget.isAlignTop = sceneWidget.isAlignLeft = sceneWidget.isAlignRight = true;
+
+                let fixedWidget = fixedUI.addComponent(Widget);
+                fixedWidget.bottom = fixedWidget.top = fixedWidget.left = fixedWidget.right = 0;
+                fixedWidget.isAlignBottom = fixedWidget.isAlignTop = fixedWidget.isAlignLeft = fixedWidget.isAlignRight = true;
+
+                let popWidget = pop.addComponent(Widget);
+                popWidget.bottom = popWidget.top = popWidget.left = popWidget.right = 0;
+                popWidget.isAlignBottom = popWidget.isAlignTop = popWidget.isAlignLeft = popWidget.isAlignRight = true;
+
+                let topWidget = topTips.addComponent(Widget);
+                topWidget.bottom = topWidget.top = topWidget.left = topWidget.right = 0;
+                topWidget.isAlignBottom = topWidget.isAlignTop = topWidget.isAlignLeft = topWidget.isAlignRight = true;
 
                 this.instance = newNode.addComponent<UIManager>(this);
 
