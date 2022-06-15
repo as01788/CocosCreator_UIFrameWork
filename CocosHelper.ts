@@ -106,7 +106,8 @@ export default class CocosHelper {
             });
         });
     }
-    public static loadResFromBundle<T extends Asset>(bundleName: string, url: string, type: typeof Asset, progressCallback?: (completedCount: number, totalCount: number, item: any) => void,isArray:boolean=false,isLog:boolean=true): Promise<T> {
+    public static loadResFromBundle<T extends Asset>(bundleName: string, url: string, type: typeof Asset, progressCallback?: (completedCount: number, totalCount: number, item: any) => void,isArray:boolean=false,isLog:boolean=true,options?:{version?: string;
+        scriptAsyncLoading?: boolean;}): Promise<T> {
         if (!bundleName || !url || !type) {
             isLog && console.log("参数错误", bundleName, url, type);
             return;
@@ -119,7 +120,7 @@ export default class CocosHelper {
         return new Promise((resolve, reject) => {
             let bundle = assetManager.getBundle(bundleName);
             if (!bundle) {
-                assetManager.loadBundle(bundleName, (err, asset: AssetManager.Bundle) => {
+                assetManager.loadBundle(bundleName, options,(err, asset: AssetManager.Bundle) => {
                     if (err) {
                         isLog && console.error(err);
                         resolve(null);
