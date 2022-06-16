@@ -106,8 +106,18 @@ export default class CocosHelper {
             });
         });
     }
-    public static loadResFromBundle<T extends Asset>(bundleName: string, url: string, type: typeof Asset, progressCallback?: (completedCount: number, totalCount: number, item: any) => void,isArray:boolean=false,isLog:boolean=true,options?:{version?: string;
-        scriptAsyncLoading?: boolean;}): Promise<T> {
+    public static loadResFromBundle<T extends Asset>(bundleName: string, url: string, type: typeof Asset, progressCallback?: (completedCount: number, totalCount: number, item: any) => void, isArray: boolean = false, isLog: boolean = true, options?: {
+        version?: string,
+        scriptAsyncLoading?: boolean,
+        preset?: string,
+        priority?: number,
+        audioLoadMode?: number,
+        onFileProgress?: (loaded: number, total: number) => void,
+        maxConcurrency?: number,
+        maxRequestsPerFrame?: number,
+        maxRetryCount?: number,
+        cacheEnabled?: boolean,
+    }): Promise<T> {
         if (!bundleName || !url || !type) {
             isLog && console.log("参数错误", bundleName, url, type);
             return;
@@ -120,14 +130,14 @@ export default class CocosHelper {
         return new Promise((resolve, reject) => {
             let bundle = assetManager.getBundle(bundleName);
             if (!bundle) {
-                assetManager.loadBundle(bundleName, options,(err, asset: AssetManager.Bundle) => {
+                assetManager.loadBundle(bundleName, options, (err, asset: AssetManager.Bundle) => {
                     if (err) {
                         isLog && console.error(err);
                         resolve(null);
                     }
                     if (asset) {
                         if (isArray) {
-                            asset.loadDir(url, type, this._progressCallback, (err, assets:any) => {
+                            asset.loadDir(url, type, this._progressCallback, (err, assets: any) => {
                                 if (err) {
                                     isLog && console.log(`${url} [资源加载] 错误 ${err}`);
                                     resolve(null);
@@ -163,7 +173,7 @@ export default class CocosHelper {
                 });
             } else {
                 if (isArray) {
-                    bundle.loadDir(url, type, this._progressCallback, (err, assets:any) => {
+                    bundle.loadDir(url, type, this._progressCallback, (err, assets: any) => {
                         if (err) {
                             isLog && console.log(`${url} [资源加载] 错误 ${err}`);
                             resolve(null);
@@ -180,7 +190,7 @@ export default class CocosHelper {
                 } else {
                     bundle.load(url, type, this._progressCallback, (err, asset: T) => {
                         if (err) {
-                            isLog &&  console.log(`${url} [资源加载] 错误 ${err}`);
+                            isLog && console.log(`${url} [资源加载] 错误 ${err}`);
                             resolve(null);
                         } else {
                             resolve(asset as T);
