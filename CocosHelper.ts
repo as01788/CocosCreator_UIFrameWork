@@ -129,80 +129,85 @@ export default class CocosHelper {
         }
         return new Promise((resolve, reject) => {
             let bundle = assetManager.getBundle(bundleName);
-            if (!bundle) {
-                assetManager.loadBundle(bundleName, options, (err, asset: AssetManager.Bundle) => {
-                    if (err) {
-                        isLog && console.error(err);
-                        resolve(null);
-                    }
-                    if (asset) {
-                        if (isArray) {
-                            asset.loadDir(url, type, this._progressCallback, (err, assets: any) => {
-                                if (err) {
-                                    isLog && console.log(`${url} [资源加载] 错误 ${err}`);
-                                    resolve(null);
-                                } else {
-                                    resolve(assets);
-                                }
-                                // 加载完毕了，清理进度数据
-                                CocosHelper.loadProgress.url = '';
-                                CocosHelper.loadProgress.completedCount = 0;
-                                CocosHelper.loadProgress.totalCount = 0;
-                                CocosHelper.loadProgress.item = null;
-                                CocosHelper.loadProgress.cb = null;
-                            });
-                        } else {
-                            asset.load(url, type, this._progressCallback, (err, asset: T) => {
-                                if (err) {
-                                    isLog && console.log(`${url} [资源加载] 错误 ${err}`);
-                                    resolve(null);
-                                } else {
-                                    resolve(asset);
-                                }
-                                // 加载完毕了，清理进度数据
-                                CocosHelper.loadProgress.url = '';
-                                CocosHelper.loadProgress.completedCount = 0;
-                                CocosHelper.loadProgress.totalCount = 0;
-                                CocosHelper.loadProgress.item = null;
-                                CocosHelper.loadProgress.cb = null;
-                            });
-                        }
-                    } else {
-                        isLog && console.error("加载bundle失败");
-                    }
-                });
-            } else {
-                if (isArray) {
-                    bundle.loadDir(url, type, this._progressCallback, (err, assets: any) => {
+            try {
+                if (!bundle) {
+                    assetManager.loadBundle(bundleName, options, (err, asset: AssetManager.Bundle) => {
                         if (err) {
-                            isLog && console.log(`${url} [资源加载] 错误 ${err}`);
+                            isLog && console.error(err);
                             resolve(null);
-                        } else {
-                            resolve(assets);
+                            return;
                         }
-                        // 加载完毕了，清理进度数据
-                        CocosHelper.loadProgress.url = '';
-                        CocosHelper.loadProgress.completedCount = 0;
-                        CocosHelper.loadProgress.totalCount = 0;
-                        CocosHelper.loadProgress.item = null;
-                        CocosHelper.loadProgress.cb = null;
+                        if (asset) {
+                            if (isArray) {
+                                asset.loadDir(url, type, this._progressCallback, (err, assets: any) => {
+                                    if (err) {
+                                        isLog && console.log(`${url} [资源加载] 错误 ${err}`);
+                                        resolve(null);
+                                    } else {
+                                        resolve(assets);
+                                    }
+                                    // 加载完毕了，清理进度数据
+                                    CocosHelper.loadProgress.url = '';
+                                    CocosHelper.loadProgress.completedCount = 0;
+                                    CocosHelper.loadProgress.totalCount = 0;
+                                    CocosHelper.loadProgress.item = null;
+                                    CocosHelper.loadProgress.cb = null;
+                                });
+                            } else {
+                                asset.load(url, type, this._progressCallback, (err, asset: T) => {
+                                    if (err) {
+                                        isLog && console.log(`${url} [资源加载] 错误 ${err}`);
+                                        resolve(null);
+                                    } else {
+                                        resolve(asset);
+                                    }
+                                    // 加载完毕了，清理进度数据
+                                    CocosHelper.loadProgress.url = '';
+                                    CocosHelper.loadProgress.completedCount = 0;
+                                    CocosHelper.loadProgress.totalCount = 0;
+                                    CocosHelper.loadProgress.item = null;
+                                    CocosHelper.loadProgress.cb = null;
+                                });
+                            }
+                        } else {
+                            isLog && console.error("加载bundle失败");
+                        }
                     });
                 } else {
-                    bundle.load(url, type, this._progressCallback, (err, asset: T) => {
-                        if (err) {
-                            isLog && console.log(`${url} [资源加载] 错误 ${err}`);
-                            resolve(null);
-                        } else {
-                            resolve(asset as T);
-                        }
-                        // 加载完毕了，清理进度数据
-                        CocosHelper.loadProgress.url = '';
-                        CocosHelper.loadProgress.completedCount = 0;
-                        CocosHelper.loadProgress.totalCount = 0;
-                        CocosHelper.loadProgress.item = null;
-                        CocosHelper.loadProgress.cb = null;
-                    });
+                    if (isArray) {
+                        bundle.loadDir(url, type, this._progressCallback, (err, assets: any) => {
+                            if (err) {
+                                isLog && console.log(`${url} [资源加载] 错误 ${err}`);
+                                resolve(null);
+                            } else {
+                                resolve(assets);
+                            }
+                            // 加载完毕了，清理进度数据
+                            CocosHelper.loadProgress.url = '';
+                            CocosHelper.loadProgress.completedCount = 0;
+                            CocosHelper.loadProgress.totalCount = 0;
+                            CocosHelper.loadProgress.item = null;
+                            CocosHelper.loadProgress.cb = null;
+                        });
+                    } else {
+                        bundle.load(url, type, this._progressCallback, (err, asset: T) => {
+                            if (err) {
+                                isLog && console.log(`${url} [资源加载] 错误 ${err}`);
+                                resolve(null);
+                            } else {
+                                resolve(asset as T);
+                            }
+                            // 加载完毕了，清理进度数据
+                            CocosHelper.loadProgress.url = '';
+                            CocosHelper.loadProgress.completedCount = 0;
+                            CocosHelper.loadProgress.totalCount = 0;
+                            CocosHelper.loadProgress.item = null;
+                            CocosHelper.loadProgress.cb = null;
+                        });
+                    }
                 }
+            } catch (e) {
+                isLog && console.error(e);
             }
         });
     }
