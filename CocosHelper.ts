@@ -57,8 +57,13 @@ export default class CocosHelper {
     }
 
     /** 同步的动画 */
-    public static async runSyncAnim(node: Node, animName?: string | number) {
-        let anim = node.getComponent(Animation);
+    public static async runSyncAnim(node: Node|Animation, animName?: string | number) {
+        let anim;
+        if(node instanceof Node){
+            anim = node.getComponent(Animation);
+        }else{
+            anim=node;
+        }
         if (!anim) return;
         let clip: AnimationClip = null;
         if (!animName) clip = anim.defaultClip;
@@ -76,6 +81,7 @@ export default class CocosHelper {
             }
         }
         if (!clip) return;
+        anim.play(clip.name);
         await CocosHelper.sleep(clip.duration);
     }
 
@@ -118,7 +124,7 @@ export default class CocosHelper {
         maxRetryCount?: number,
         cacheEnabled?: boolean,
     }): Promise<T> {
-        if (!bundleName || !url || !type) {
+        if (!bundleName || (!url && !isArray) || !type) {
             isLog && console.log("参数错误", bundleName, url, type);
             return;
         }
